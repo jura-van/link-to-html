@@ -1,10 +1,27 @@
+const suffixes = [
+    " - The New York Times",
+    " | EurekAlert! Science News",
+    " | MIT Technology Review",
+    " | Nature Machine Intelligence",
+    " | Science",
+    " | Environment | The Guardian"
+];
+
 chrome.browserAction.onClicked.addListener(function (tab) {
     chrome.tabs.query({active: true, currentWindow: true}, function (tab) {
         if (tab && tab.length > 0) {
-            copyTextToClipboard('<a href="' + tab[0].url + '">' + tab[0].title + '</a><br />');
+            copyTextToClipboard('<a href="' + tab[0].url + '">' + removeSuffix(tab[0].title) + '</a><br />');
         }
     });
 });
+
+function removeSuffix(title) {
+    for (let i = 0; i < suffixes.length; i++) {
+        title = title.replace(suffixes[i], "");
+    }
+
+    return title;
+}
 
 // code from: https://stackoverflow.com/questions/3436102/copy-to-clipboard-in-chrome-extension
 function copyTextToClipboard(text) {
